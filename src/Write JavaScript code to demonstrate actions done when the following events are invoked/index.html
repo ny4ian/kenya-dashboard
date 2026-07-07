@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>JS Events Demo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 500px;
+      margin: 40px auto;
+      padding: 0 20px;
+      background: #f5f5f5;
+    }
+    h1 { color: #333; }
+
+    #click-section, #submit-section {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+    #myBtn {
+      background: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    #myBtn:hover { background: #0056b3; }
+    #click-output { margin-top: 12px; color: #007bff; font-weight: bold; min-height: 24px; }
+
+    .form-group { margin-bottom: 14px; }
+    label { display: block; margin-bottom: 4px; font-weight: bold; color: #444; }
+    input[type="text"], input[type="email"] {
+      width: 100%;
+      padding: 8px 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      font-size: 0.95rem;
+      box-sizing: border-box;
+    }
+    input:focus { outline: none; border-color: #007bff; }
+    button[type="submit"] {
+      background: #28a745;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 5px;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+    button[type="submit"]:hover { background: #1e7e34; }
+    #submit-output { margin-top: 12px; color: #28a745; font-weight: bold; min-height: 24px; }
+    .error { color: #dc3545 !important; }
+  </style>
+</head>
+<body>
+
+  <h1>JS Events Demo</h1>
+
+  <!-- i. Click Event -->
+  <div id="click-section">
+    <h2>i. Click Event</h2>
+    <button id="myBtn">Click Me</button>
+    <p id="click-output"></p>
+  </div>
+
+  <!-- ii. Submit Event -->
+  <div id="submit-section">
+    <h2>ii. Submit Event</h2>
+    <form id="myForm">
+      <div class="form-group">
+        <label for="nameInput">Name</label>
+        <input type="text" id="nameInput" placeholder="Enter your name" />
+      </div>
+      <div class="form-group">
+        <label for="emailInput">Email</label>
+        <input type="email" id="emailInput" placeholder="you@example.com" />
+      </div>
+      <button type="submit">Submit</button>
+    </form>
+    <p id="submit-output"></p>
+  </div>
+
+  <!-- Link to external JS file -->
+  <script src="app.js"></script>
+
+</body>
+</html>
