@@ -6,23 +6,13 @@ const CARD = "#0a1628";
 const BORDER = "#0d2545";
 const API = "https://chainpay-kenya-api.onrender.com";
 
-const glow = { boxShadow: "0 0 30px rgba(0,245,196,0.08)" };
 const inputStyle = {
   width: "100%", padding: "13px 16px",
   background: "#060f20", border: "1px solid #0d2545",
   borderRadius: "10px", color: "white",
   fontFamily: "Times New Roman", fontSize: "14px",
   outline: "none", boxSizing: "border-box",
-  transition: "border 0.2s"
 };
-
-function Badge({ text, color = T }) {
-  return (
-    <span style={{ background: `${color}15`, border: `1px solid ${color}40`, color, padding: "3px 12px", borderRadius: "20px", fontSize: "11px", letterSpacing: "1px", fontFamily: "Times New Roman" }}>
-      {text}
-    </span>
-  );
-}
 
 function LoginPage({ onLogin, goRegister }) {
   const [username, setUsername] = useState("");
@@ -46,65 +36,29 @@ function LoginPage({ onLogin, goRegister }) {
   };
 
   return (
-    <div style={{ minHeight: "100vh", background: DARK, display: "flex", fontFamily: "Times New Roman", overflow: "hidden" }}>
-      {/* Left Panel */}
-      <div style={{ flex: 1, background: `linear-gradient(135deg, #050d1a 0%, #0a1f3d 50%, #050d1a 100%)`, display: "flex", flexDirection: "column", justifyContent: "center", padding: "60px", position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", top: "20%", left: "10%", width: "300px", height: "300px", background: `radial-gradient(circle, ${T}10, transparent)`, borderRadius: "50%" }} />
-        <div style={{ position: "absolute", bottom: "20%", right: "5%", width: "200px", height: "200px", background: "radial-gradient(circle, #0066ff10, transparent)", borderRadius: "50%" }} />
-        <div style={{ position: "relative", zIndex: 1 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "50px" }}>
-            <div style={{ width: "44px", height: "44px", background: `linear-gradient(135deg, ${T}, #0099ff)`, borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "20px" }}>⬡</div>
-            <span style={{ color: T, fontSize: "18px", fontWeight: "bold", letterSpacing: "2px" }}>CHAINPAY KENYA</span>
-          </div>
-          <h1 style={{ color: "white", fontSize: "42px", lineHeight: "1.2", margin: "0 0 20px", fontWeight: "bold" }}>
-            Secure Financial<br />
-            <span style={{ color: T }}>Blockchain</span><br />
-            Transactions
-          </h1>
-          <p style={{ color: "#4a6a8a", fontSize: "15px", lineHeight: "1.8", maxWidth: "400px", margin: "0 0 40px" }}>
-            A Hyperledger Fabric-powered platform for Kenya's financial sector. Send, receive, and track money with permanent blockchain records.
-          </p>
-          <div style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
-            {["🔒 Immutable blockchain ledger", "📱 M-Pesa Daraja integration", "🌍 Multi-currency support (KES, USD, EUR, GBP)", "⬡ Unique CPK account numbers"].map(f => (
-              <div key={f} style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-                <span style={{ color: "#4a6a8a", fontSize: "14px" }}>{f}</span>
-              </div>
-            ))}
-          </div>
+    <div style={{ minHeight: "100vh", background: DARK, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", fontFamily: "Times New Roman", padding: "20px", boxSizing: "border-box" }}>
+      <div style={{ width: "100%", maxWidth: "420px" }}>
+        <div style={{ textAlign: "center", marginBottom: "30px" }}>
+          <div style={{ width: "60px", height: "60px", background: `linear-gradient(135deg, ${T}, #0099ff)`, borderRadius: "15px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "28px", margin: "0 auto 15px" }}>⬡</div>
+          <h1 style={{ color: "white", margin: 0, fontSize: "22px", letterSpacing: "2px" }}>CHAINPAY KENYA</h1>
+          <p style={{ color: "#4a6a8a", margin: "8px 0 0", fontSize: "13px" }}>Blockchain Financial Network</p>
         </div>
-      </div>
-
-      {/* Right Panel */}
-      <div style={{ width: "480px", display: "flex", alignItems: "center", justifyContent: "center", padding: "40px", background: "#060e1c", borderLeft: `1px solid ${BORDER}` }}>
-        <div style={{ width: "100%" }}>
-          <div style={{ marginBottom: "35px" }}>
-            <h2 style={{ color: "white", fontSize: "26px", margin: "0 0 8px" }}>Welcome back</h2>
-            <p style={{ color: "#4a6a8a", margin: 0, fontSize: "14px" }}>Sign in to your ChainPay account</p>
-          </div>
-
-          <div style={{ marginBottom: "18px" }}>
+        <div style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: "16px", padding: "25px" }}>
+          <h2 style={{ color: "white", margin: "0 0 20px", fontSize: "20px" }}>Sign In</h2>
+          <div style={{ marginBottom: "15px" }}>
             <label style={{ color: "#4a6a8a", fontSize: "11px", letterSpacing: "1px", display: "block", marginBottom: "8px" }}>USERNAME</label>
             <input style={inputStyle} placeholder="Enter your username" value={username} onChange={e => setUsername(e.target.value)} />
           </div>
-
-          <div style={{ marginBottom: "25px" }}>
+          <div style={{ marginBottom: "20px" }}>
             <label style={{ color: "#4a6a8a", fontSize: "11px", letterSpacing: "1px", display: "block", marginBottom: "8px" }}>PASSWORD</label>
             <input style={inputStyle} type="password" placeholder="Enter your password" value={password} onChange={e => setPassword(e.target.value)} onKeyDown={e => e.key === "Enter" && handleLogin()} />
           </div>
-
-          {error && (
-            <div style={{ background: "#2a0a0a", border: "1px solid #5a1a1a", borderRadius: "8px", padding: "12px 16px", marginBottom: "18px" }}>
-              <p style={{ color: "#ff6b6b", margin: 0, fontSize: "13px" }}>⚠ {error}</p>
-            </div>
-          )}
-
-          <button onClick={handleLogin} disabled={loading} style={{ width: "100%", padding: "15px", background: `linear-gradient(135deg, ${T}, #0099ff)`, border: "none", borderRadius: "10px", color: DARK, fontWeight: "bold", cursor: "pointer", fontFamily: "Times New Roman", fontSize: "15px", letterSpacing: "1px", marginBottom: "20px" }}>
+          {error && <div style={{ background: "#2a0a0a", border: "1px solid #5a1a1a", borderRadius: "8px", padding: "12px", marginBottom: "15px" }}><p style={{ color: "#ff6b6b", margin: 0, fontSize: "13px" }}>⚠ {error}</p></div>}
+          <button onClick={handleLogin} disabled={loading} style={{ width: "100%", padding: "15px", background: `linear-gradient(135deg, ${T}, #0099ff)`, border: "none", borderRadius: "10px", color: DARK, fontWeight: "bold", cursor: "pointer", fontFamily: "Times New Roman", fontSize: "15px", marginBottom: "15px" }}>
             {loading ? "SIGNING IN..." : "SIGN IN →"}
           </button>
-
           <p style={{ color: "#4a6a8a", textAlign: "center", fontSize: "13px", margin: 0 }}>
-            No account?{" "}
-            <span onClick={goRegister} style={{ color: T, cursor: "pointer", textDecoration: "underline" }}>Create one here</span>
+            No account? <span onClick={goRegister} style={{ color: T, cursor: "pointer" }}>Register here</span>
           </p>
         </div>
       </div>
@@ -129,56 +83,30 @@ function RegisterPage({ onRegister, goLogin }) {
   };
 
   return (
-    <div style={{ minHeight: "100vh", background: DARK, display: "flex", fontFamily: "Times New Roman", overflow: "hidden" }}>
-      <div style={{ flex: 1, background: `linear-gradient(135deg, #050d1a 0%, #0a1f3d 50%, #050d1a 100%)`, display: "flex", flexDirection: "column", justifyContent: "center", padding: "60px", position: "relative", overflow: "hidden" }}>
-        <div style={{ position: "absolute", top: "20%", left: "10%", width: "300px", height: "300px", background: `radial-gradient(circle, ${T}10, transparent)`, borderRadius: "50%" }} />
-        <div style={{ position: "relative", zIndex: 1 }}>
-          <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "50px" }}>
-            <div style={{ width: "44px", height: "44px", background: `linear-gradient(135deg, ${T}, #0099ff)`, borderRadius: "12px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "20px" }}>⬡</div>
-            <span style={{ color: T, fontSize: "18px", fontWeight: "bold", letterSpacing: "2px" }}>CHAINPAY KENYA</span>
-          </div>
-          <h1 style={{ color: "white", fontSize: "38px", lineHeight: "1.2", margin: "0 0 20px" }}>
-            Join Kenya's<br />
-            <span style={{ color: T }}>Blockchain</span><br />
-            Financial Network
-          </h1>
-          <p style={{ color: "#4a6a8a", fontSize: "15px", lineHeight: "1.8", maxWidth: "400px" }}>
-            Get your unique CPK account number and start sending money securely on the blockchain in minutes.
-          </p>
+    <div style={{ minHeight: "100vh", background: DARK, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", fontFamily: "Times New Roman", padding: "20px", boxSizing: "border-box" }}>
+      <div style={{ width: "100%", maxWidth: "420px" }}>
+        <div style={{ textAlign: "center", marginBottom: "30px" }}>
+          <div style={{ width: "60px", height: "60px", background: `linear-gradient(135deg, ${T}, #0099ff)`, borderRadius: "15px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "28px", margin: "0 auto 15px" }}>⬡</div>
+          <h1 style={{ color: "white", margin: 0, fontSize: "22px", letterSpacing: "2px" }}>CHAINPAY KENYA</h1>
         </div>
-      </div>
-
-      <div style={{ width: "480px", display: "flex", alignItems: "center", justifyContent: "center", padding: "40px", background: "#060e1c", borderLeft: `1px solid ${BORDER}` }}>
-        <div style={{ width: "100%" }}>
-          <div style={{ marginBottom: "35px" }}>
-            <h2 style={{ color: "white", fontSize: "26px", margin: "0 0 8px" }}>Create Account</h2>
-            <p style={{ color: "#4a6a8a", margin: 0, fontSize: "14px" }}>Get your CPK account number instantly</p>
-          </div>
-
+        <div style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: "16px", padding: "25px" }}>
+          <h2 style={{ color: "white", margin: "0 0 20px", fontSize: "20px" }}>Create Account</h2>
           {[
             { label: "USERNAME", key: "username", type: "text", placeholder: "Choose a username" },
             { label: "EMAIL", key: "email", type: "email", placeholder: "Your email address" },
             { label: "PASSWORD", key: "password", type: "password", placeholder: "Create a strong password" },
           ].map(f => (
-            <div key={f.key} style={{ marginBottom: "18px" }}>
+            <div key={f.key} style={{ marginBottom: "15px" }}>
               <label style={{ color: "#4a6a8a", fontSize: "11px", letterSpacing: "1px", display: "block", marginBottom: "8px" }}>{f.label}</label>
               <input style={inputStyle} type={f.type} placeholder={f.placeholder} value={form[f.key]} onChange={e => setForm({ ...form, [f.key]: e.target.value })} />
             </div>
           ))}
-
-          {error && (
-            <div style={{ background: "#2a0a0a", border: "1px solid #5a1a1a", borderRadius: "8px", padding: "12px 16px", marginBottom: "18px" }}>
-              <p style={{ color: "#ff6b6b", margin: 0, fontSize: "13px" }}>⚠ {error}</p>
-            </div>
-          )}
-
-          <button onClick={handleRegister} disabled={loading} style={{ width: "100%", padding: "15px", background: `linear-gradient(135deg, ${T}, #0099ff)`, border: "none", borderRadius: "10px", color: DARK, fontWeight: "bold", cursor: "pointer", fontFamily: "Times New Roman", fontSize: "15px", letterSpacing: "1px", marginBottom: "20px" }}>
+          {error && <div style={{ background: "#2a0a0a", border: "1px solid #5a1a1a", borderRadius: "8px", padding: "12px", marginBottom: "15px" }}><p style={{ color: "#ff6b6b", margin: 0, fontSize: "13px" }}>⚠ {error}</p></div>}
+          <button onClick={handleRegister} disabled={loading} style={{ width: "100%", padding: "15px", background: `linear-gradient(135deg, ${T}, #0099ff)`, border: "none", borderRadius: "10px", color: DARK, fontWeight: "bold", cursor: "pointer", fontFamily: "Times New Roman", fontSize: "15px", marginBottom: "15px" }}>
             {loading ? "CREATING..." : "CREATE ACCOUNT →"}
           </button>
-
           <p style={{ color: "#4a6a8a", textAlign: "center", fontSize: "13px", margin: 0 }}>
-            Already have an account?{" "}
-            <span onClick={goLogin} style={{ color: T, cursor: "pointer", textDecoration: "underline" }}>Sign in here</span>
+            Have an account? <span onClick={goLogin} style={{ color: T, cursor: "pointer" }}>Sign in here</span>
           </p>
         </div>
       </div>
@@ -200,6 +128,7 @@ function Nav({ page, setPage, user, onLogout }) {
       </div>
       {menuOpen && (
         <div style={{ paddingBottom: "15px" }}>
+          <p style={{ color: "#4a6a8a", fontSize: "11px", margin: "0 0 10px 10px" }}>👤 {user?.username}</p>
           {links.map(l => (
             <button key={l} onClick={() => { setPage(l); setMenuOpen(false); }} style={{ display: "block", width: "100%", textAlign: "left", background: page === l ? `${T}15` : "transparent", color: page === l ? T : "#4a6a8a", border: "none", padding: "12px 10px", cursor: "pointer", fontFamily: "Times New Roman", fontSize: "14px", borderRadius: "8px" }}>{l}</button>
           ))}
@@ -219,68 +148,47 @@ function Home({ user, wallet }) {
   }, []);
 
   return (
-    <div style={{ padding: "30px", fontFamily: "Times New Roman" }}>
-      {/* Hero */}
-      <div style={{ background: `linear-gradient(135deg, #060e1c 0%, #0a1f3d 60%, #060e1c 100%)`, borderRadius: "16px", border: `1px solid ${BORDER}`, padding: "50px", marginBottom: "25px", position: "relative", overflow: "hidden" }}>
+    <div style={{ padding: "20px", fontFamily: "Times New Roman" }}>
+      <div style={{ background: `linear-gradient(135deg, #060e1c, #0a1f3d)`, borderRadius: "16px", border: `1px solid ${BORDER}`, padding: "25px", marginBottom: "20px", position: "relative", overflow: "hidden" }}>
         <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "3px", background: `linear-gradient(90deg, ${T}, #0099ff, #8b5cf6)` }} />
-        <div style={{ position: "absolute", top: "50%", right: "5%", transform: "translateY(-50%)", fontSize: "120px", opacity: 0.03 }}>⬡</div>
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-          <div>
-            <div style={{ marginBottom: "8px" }}><Badge text={`● BLOCK #${blockHeight.toLocaleString()} — LIVE`} /></div>
-            <h1 style={{ color: "white", fontSize: "28px", margin: "8px 0 5px" }}>Welcome back, {user?.username}</h1>
-            <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "20px" }}>
-              <span style={{ color: "#4a6a8a", fontSize: "13px" }}>Account Number:</span>
-              <span style={{ color: "#60a5fa", fontSize: "16px", fontWeight: "bold", letterSpacing: "2px", background: "#060e1c", border: `1px solid ${BORDER}`, padding: "4px 14px", borderRadius: "8px" }}>{wallet?.accountNumber || "..."}</span>
-            </div>
-            <div>
-              <p style={{ color: "#4a6a8a", margin: "0 0 5px", fontSize: "12px", letterSpacing: "1px" }}>WALLET BALANCE</p>
-              <h1 style={{ color: T, fontSize: "52px", margin: 0, letterSpacing: "-1px" }}>KES {(wallet?.balanceKES || 0).toLocaleString()}</h1>
-            </div>
-          </div>
-          <div style={{ display: "flex", flexDirection: "column", gap: "12px", minWidth: "200px" }}>
-            {[
-              { label: "TPS", value: tps, color: T },
-              { label: "Network", value: "LIVE", color: "#22c55e" },
-              { label: "Nodes", value: "5 / 5", color: "#60a5fa" },
-            ].map(s => (
-              <div key={s.label} style={{ background: "#050d1a", border: `1px solid ${BORDER}`, borderRadius: "10px", padding: "12px 18px", display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-                <span style={{ color: "#4a6a8a", fontSize: "12px" }}>{s.label}</span>
-                <span style={{ color: s.color, fontSize: "14px", fontWeight: "bold" }}>{s.value}</span>
-              </div>
-            ))}
-          </div>
+        <div style={{ marginBottom: "5px" }}>
+          <span style={{ background: `${T}15`, border: `1px solid ${T}40`, color: T, padding: "3px 12px", borderRadius: "20px", fontSize: "11px" }}>● BLOCK #{blockHeight.toLocaleString()} — LIVE</span>
         </div>
+        <h1 style={{ color: "white", fontSize: "22px", margin: "10px 0 5px" }}>Welcome, {user?.username}</h1>
+        <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "15px", flexWrap: "wrap" }}>
+          <span style={{ color: "#4a6a8a", fontSize: "12px" }}>Account:</span>
+          <span style={{ color: "#60a5fa", fontSize: "14px", fontWeight: "bold", letterSpacing: "2px", background: "#060e1c", border: `1px solid ${BORDER}`, padding: "3px 10px", borderRadius: "8px" }}>{wallet?.accountNumber || "..."}</span>
+        </div>
+        <p style={{ color: "#4a6a8a", margin: "0 0 5px", fontSize: "11px", letterSpacing: "1px" }}>WALLET BALANCE</p>
+        <h1 style={{ color: T, fontSize: "36px", margin: 0 }}>KES {(wallet?.balanceKES || 0).toLocaleString()}</h1>
       </div>
 
-      {/* Stats */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(4, 1fr)", gap: "15px", marginBottom: "25px" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "12px", marginBottom: "20px" }}>
         {[
-          { label: "24h Volume", value: "KES 2.4B", sub: "+12.3%", color: T },
-          { label: "Transactions", value: "18,284", sub: "all time", color: "#60a5fa" },
-          { label: "Block Height", value: `#${blockHeight.toLocaleString()}`, sub: "~4s blocks", color: "#f59e0b" },
-          { label: "Consensus", value: "100%", sub: "all nodes", color: "#22c55e" },
+          { label: "24h Volume", value: "KES 2.4B", color: T },
+          { label: "TPS", value: tps, color: "#60a5fa" },
+          { label: "Block Height", value: `#${blockHeight.toLocaleString()}`, color: "#f59e0b" },
+          { label: "Consensus", value: "100%", color: "#22c55e" },
         ].map(s => (
-          <div key={s.label} style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: "12px", padding: "20px", position: "relative", overflow: "hidden", ...glow }}>
-            <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: "2px", background: `linear-gradient(90deg, ${s.color}, transparent)` }} />
-            <p style={{ color: "#4a6a8a", fontSize: "11px", margin: "0 0 8px", letterSpacing: "1px" }}>{s.label.toUpperCase()}</p>
-            <p style={{ color: s.color, fontSize: "22px", fontWeight: "bold", margin: "0 0 4px" }}>{s.value}</p>
-            <p style={{ color: "#2a4a6a", fontSize: "11px", margin: 0 }}>{s.sub}</p>
+          <div key={s.label} style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: "12px", padding: "15px" }}>
+            <p style={{ color: "#4a6a8a", fontSize: "10px", margin: "0 0 5px", letterSpacing: "1px" }}>{s.label.toUpperCase()}</p>
+            <p style={{ color: s.color, fontSize: "18px", fontWeight: "bold", margin: 0 }}>{s.value}</p>
           </div>
         ))}
       </div>
 
-      {/* Features */}
-      <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: "15px" }}>
+      <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "12px" }}>
         {[
-          { title: "Immutable Ledger", desc: "Every transaction is permanently recorded on Hyperledger Fabric and cannot be altered by any party.", icon: "🔒", color: T },
-          { title: "M-Pesa Integration", desc: "Deposit and withdraw directly via Safaricom Daraja API. Real-time KES mobile money transactions.", icon: "📱", color: "#22c55e" },
-          { title: "CPK Account Numbers", desc: "Send money securely using unique CPK account numbers — no phone numbers or personal details needed.", icon: "⬡", color: "#60a5fa" },
+          { title: "Immutable Ledger", desc: "Every transaction is permanently recorded on Hyperledger Fabric.", icon: "🔒", color: T },
+          { title: "M-Pesa Integration", desc: "Deposit and withdraw via Safaricom Daraja API.", icon: "📱", color: "#22c55e" },
+          { title: "CPK Account Numbers", desc: "Send money securely using unique CPK account numbers.", icon: "⬡", color: "#60a5fa" },
         ].map(f => (
-          <div key={f.title} style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: "12px", padding: "25px", position: "relative", overflow: "hidden" }}>
-            <div style={{ position: "absolute", bottom: 0, right: 0, fontSize: "60px", opacity: 0.04 }}>{f.icon}</div>
-            <div style={{ fontSize: "28px", marginBottom: "12px" }}>{f.icon}</div>
-            <h3 style={{ color: f.color, margin: "0 0 10px", fontSize: "16px" }}>{f.title}</h3>
-            <p style={{ color: "#4a6a8a", margin: 0, lineHeight: "1.7", fontSize: "13px" }}>{f.desc}</p>
+          <div key={f.title} style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: "12px", padding: "20px", display: "flex", gap: "15px", alignItems: "flex-start" }}>
+            <div style={{ fontSize: "24px" }}>{f.icon}</div>
+            <div>
+              <h3 style={{ color: f.color, margin: "0 0 6px", fontSize: "15px" }}>{f.title}</h3>
+              <p style={{ color: "#4a6a8a", margin: 0, fontSize: "13px", lineHeight: "1.6" }}>{f.desc}</p>
+            </div>
           </div>
         ))}
       </div>
@@ -293,6 +201,8 @@ function Wallet({ user, refresh }) {
   const [currency, setCurrency] = useState("KES");
   const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
+  const conversions = { KES: 1, USD: 129.50, EUR: 140.20, GBP: 163.80 };
+  const preview = amount ? (parseFloat(amount) * conversions[currency]).toFixed(2) : null;
 
   const deposit = async () => {
     if (!amount) { setMessage("Enter an amount"); return; }
@@ -305,40 +215,29 @@ function Wallet({ user, refresh }) {
     setLoading(false);
   };
 
-  const conversions = { KES: 1, USD: 129.50, EUR: 140.20, GBP: 163.80 };
-  const preview = amount ? (parseFloat(amount) * conversions[currency]).toFixed(2) : null;
-
   return (
-    <div style={{ padding: "30px", fontFamily: "Times New Roman", maxWidth: "520px", margin: "0 auto" }}>
+    <div style={{ padding: "20px", fontFamily: "Times New Roman" }}>
       <h2 style={{ color: "white", marginBottom: "5px" }}>Deposit Funds</h2>
-      <p style={{ color: "#4a6a8a", fontSize: "13px", marginBottom: "25px" }}>Deposit in any currency — automatically converted to KES at live rates</p>
-      <div style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: "14px", padding: "28px", ...glow }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr", gap: "18px" }}>
-          <div>
-            <label style={{ color: "#4a6a8a", fontSize: "11px", letterSpacing: "1px", display: "block", marginBottom: "8px" }}>AMOUNT</label>
-            <input style={inputStyle} placeholder="e.g. 1000" value={amount} onChange={e => setAmount(e.target.value)} />
-          </div>
-          <div>
-            <label style={{ color: "#4a6a8a", fontSize: "11px", letterSpacing: "1px", display: "block", marginBottom: "8px" }}>CURRENCY</label>
-            <select style={inputStyle} value={currency} onChange={e => setCurrency(e.target.value)}>
-              <option>KES</option><option>USD</option><option>EUR</option><option>GBP</option>
-            </select>
-          </div>
-        </div>
+      <p style={{ color: "#4a6a8a", fontSize: "13px", marginBottom: "20px" }}>Automatically converted to KES</p>
+      <div style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: "14px", padding: "20px", marginBottom: "15px" }}>
+        <label style={{ color: "#4a6a8a", fontSize: "11px", letterSpacing: "1px", display: "block", marginBottom: "8px" }}>AMOUNT</label>
+        <input style={{ ...inputStyle, marginBottom: "15px" }} placeholder="e.g. 1000" value={amount} onChange={e => setAmount(e.target.value)} />
+        <label style={{ color: "#4a6a8a", fontSize: "11px", letterSpacing: "1px", display: "block", marginBottom: "8px" }}>CURRENCY</label>
+        <select style={{ ...inputStyle, marginBottom: "15px" }} value={currency} onChange={e => setCurrency(e.target.value)}>
+          <option>KES</option><option>USD</option><option>EUR</option><option>GBP</option>
+        </select>
         {preview && currency !== "KES" && (
-          <div style={{ marginTop: "15px", background: `${T}08`, border: `1px solid ${T}25`, borderRadius: "8px", padding: "12px 16px" }}>
-            <p style={{ color: T, margin: 0, fontSize: "13px" }}>≈ KES {parseFloat(preview).toLocaleString()} at 1 {currency} = KES {conversions[currency]}</p>
+          <div style={{ background: `${T}08`, border: `1px solid ${T}25`, borderRadius: "8px", padding: "10px", marginBottom: "15px" }}>
+            <p style={{ color: T, margin: 0, fontSize: "13px" }}>≈ KES {parseFloat(preview).toLocaleString()}</p>
           </div>
         )}
-        <button onClick={deposit} disabled={loading} style={{ width: "100%", padding: "15px", background: `linear-gradient(135deg, ${T}, #0099ff)`, border: "none", borderRadius: "10px", color: DARK, fontWeight: "bold", cursor: "pointer", fontFamily: "Times New Roman", fontSize: "15px", marginTop: "20px" }}>
+        <button onClick={deposit} disabled={loading} style={{ width: "100%", padding: "15px", background: `linear-gradient(135deg, ${T}, #0099ff)`, border: "none", borderRadius: "10px", color: DARK, fontWeight: "bold", cursor: "pointer", fontFamily: "Times New Roman", fontSize: "15px" }}>
           {loading ? "PROCESSING..." : "DEPOSIT →"}
         </button>
-        {message && <div style={{ marginTop: "15px", background: "#0a2010", border: "1px solid #1a5030", borderRadius: "8px", padding: "12px 16px" }}><p style={{ color: "#22c55e", margin: 0, fontSize: "13px" }}>✓ {message}</p></div>}
+        {message && <div style={{ marginTop: "12px", background: "#0a2010", border: "1px solid #1a5030", borderRadius: "8px", padding: "10px" }}><p style={{ color: "#22c55e", margin: 0, fontSize: "13px" }}>✓ {message}</p></div>}
       </div>
-
-      {/* Exchange rates */}
-      <div style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: "14px", padding: "20px", marginTop: "15px" }}>
-        <p style={{ color: "#4a6a8a", fontSize: "11px", letterSpacing: "1px", margin: "0 0 15px" }}>LIVE EXCHANGE RATES TO KES</p>
+      <div style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: "14px", padding: "20px" }}>
+        <p style={{ color: "#4a6a8a", fontSize: "11px", letterSpacing: "1px", margin: "0 0 12px" }}>EXCHANGE RATES</p>
         {Object.entries(conversions).filter(([k]) => k !== "KES").map(([cur, rate]) => (
           <div key={cur} style={{ display: "flex", justifyContent: "space-between", padding: "8px 0", borderBottom: `1px solid ${BORDER}` }}>
             <span style={{ color: "#4a6a8a", fontSize: "13px" }}>1 {cur}</span>
@@ -368,30 +267,22 @@ function Send({ user, refresh }) {
   };
 
   return (
-    <div style={{ padding: "30px", fontFamily: "Times New Roman", maxWidth: "520px", margin: "0 auto" }}>
+    <div style={{ padding: "20px", fontFamily: "Times New Roman" }}>
       <h2 style={{ color: "white", marginBottom: "5px" }}>Send Money</h2>
-      <p style={{ color: "#4a6a8a", fontSize: "13px", marginBottom: "25px" }}>Transfer funds using the recipient's CPK account number</p>
-      <div style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: "14px", padding: "28px", ...glow }}>
-        <div style={{ marginBottom: "18px" }}>
-          <label style={{ color: "#4a6a8a", fontSize: "11px", letterSpacing: "1px", display: "block", marginBottom: "8px" }}>RECIPIENT ACCOUNT NUMBER</label>
-          <input style={inputStyle} placeholder="e.g. CPK483920" value={form.toAccount} onChange={e => setForm({ ...form, toAccount: e.target.value.toUpperCase() })} />
-        </div>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: "15px", marginBottom: "20px" }}>
-          <div>
-            <label style={{ color: "#4a6a8a", fontSize: "11px", letterSpacing: "1px", display: "block", marginBottom: "8px" }}>AMOUNT</label>
-            <input style={inputStyle} placeholder="e.g. 500" value={form.amount} onChange={e => setForm({ ...form, amount: e.target.value })} />
-          </div>
-          <div>
-            <label style={{ color: "#4a6a8a", fontSize: "11px", letterSpacing: "1px", display: "block", marginBottom: "8px" }}>CURRENCY</label>
-            <select style={inputStyle} value={form.currency} onChange={e => setForm({ ...form, currency: e.target.value })}>
-              <option>KES</option><option>USD</option><option>EUR</option><option>GBP</option>
-            </select>
-          </div>
-        </div>
+      <p style={{ color: "#4a6a8a", fontSize: "13px", marginBottom: "20px" }}>Transfer using CPK account number</p>
+      <div style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: "14px", padding: "20px" }}>
+        <label style={{ color: "#4a6a8a", fontSize: "11px", letterSpacing: "1px", display: "block", marginBottom: "8px" }}>RECIPIENT ACCOUNT NUMBER</label>
+        <input style={{ ...inputStyle, marginBottom: "15px" }} placeholder="e.g. CPK483920" value={form.toAccount} onChange={e => setForm({ ...form, toAccount: e.target.value.toUpperCase() })} />
+        <label style={{ color: "#4a6a8a", fontSize: "11px", letterSpacing: "1px", display: "block", marginBottom: "8px" }}>AMOUNT</label>
+        <input style={{ ...inputStyle, marginBottom: "15px" }} placeholder="e.g. 500" value={form.amount} onChange={e => setForm({ ...form, amount: e.target.value })} />
+        <label style={{ color: "#4a6a8a", fontSize: "11px", letterSpacing: "1px", display: "block", marginBottom: "8px" }}>CURRENCY</label>
+        <select style={{ ...inputStyle, marginBottom: "20px" }} value={form.currency} onChange={e => setForm({ ...form, currency: e.target.value })}>
+          <option>KES</option><option>USD</option><option>EUR</option><option>GBP</option>
+        </select>
         <button onClick={send} disabled={loading} style={{ width: "100%", padding: "15px", background: `linear-gradient(135deg, ${T}, #0099ff)`, border: "none", borderRadius: "10px", color: DARK, fontWeight: "bold", cursor: "pointer", fontFamily: "Times New Roman", fontSize: "15px" }}>
           {loading ? "SENDING..." : "SEND →"}
         </button>
-        {message && <div style={{ marginTop: "15px", background: isError ? "#1a0808" : "#0a2010", border: `1px solid ${isError ? "#5a1a1a" : "#1a5030"}`, borderRadius: "8px", padding: "12px 16px" }}><p style={{ color: isError ? "#ff6b6b" : "#22c55e", margin: 0, fontSize: "13px" }}>{isError ? "⚠" : "✓"} {message}</p></div>}
+        {message && <div style={{ marginTop: "12px", background: isError ? "#1a0808" : "#0a2010", border: `1px solid ${isError ? "#5a1a1a" : "#1a5030"}`, borderRadius: "8px", padding: "10px" }}><p style={{ color: isError ? "#ff6b6b" : "#22c55e", margin: 0, fontSize: "13px" }}>{isError ? "⚠" : "✓"} {message}</p></div>}
       </div>
     </div>
   );
@@ -423,34 +314,28 @@ function MPesa({ user, refresh }) {
   };
 
   return (
-    <div style={{ padding: "30px", fontFamily: "Times New Roman", maxWidth: "520px", margin: "0 auto" }}>
+    <div style={{ padding: "20px", fontFamily: "Times New Roman" }}>
       <div style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "5px" }}>
         <div style={{ width: "40px", height: "40px", background: "linear-gradient(135deg, #16a34a, #15803d)", borderRadius: "10px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "20px" }}>📱</div>
         <h2 style={{ color: "white", margin: 0 }}>M-Pesa</h2>
       </div>
-      <p style={{ color: "#4a6a8a", fontSize: "13px", marginBottom: "25px" }}>Powered by Safaricom Daraja API — Sandbox Mode</p>
-
-      <div style={{ display: "flex", gap: "8px", marginBottom: "20px" }}>
+      <p style={{ color: "#4a6a8a", fontSize: "13px", marginBottom: "20px" }}>Safaricom Daraja API — Sandbox</p>
+      <div style={{ display: "flex", gap: "8px", marginBottom: "15px" }}>
         {["deposit", "withdraw"].map(m => (
-          <button key={m} onClick={() => { setMode(m); setMessage(""); }} style={{ flex: 1, padding: "12px", background: mode === m ? (m === "deposit" ? "#16a34a" : "#d97706") : CARD, color: mode === m ? "white" : "#4a6a8a", border: `1px solid ${mode === m ? "transparent" : BORDER}`, borderRadius: "10px", cursor: "pointer", fontFamily: "Times New Roman", fontSize: "13px", fontWeight: mode === m ? "bold" : "normal" }}>
+          <button key={m} onClick={() => { setMode(m); setMessage(""); }} style={{ flex: 1, padding: "12px", background: mode === m ? (m === "deposit" ? "#16a34a" : "#d97706") : CARD, color: mode === m ? "white" : "#4a6a8a", border: `1px solid ${mode === m ? "transparent" : BORDER}`, borderRadius: "10px", cursor: "pointer", fontFamily: "Times New Roman", fontSize: "13px" }}>
             {m === "deposit" ? "📥 DEPOSIT" : "📤 WITHDRAW"}
           </button>
         ))}
       </div>
-
-      <div style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: "14px", padding: "28px", ...glow }}>
-        <div style={{ marginBottom: "18px" }}>
-          <label style={{ color: "#4a6a8a", fontSize: "11px", letterSpacing: "1px", display: "block", marginBottom: "8px" }}>PHONE NUMBER</label>
-          <input style={inputStyle} placeholder="254708374149" value={phone} onChange={e => setPhone(e.target.value)} />
-        </div>
-        <div style={{ marginBottom: "22px" }}>
-          <label style={{ color: "#4a6a8a", fontSize: "11px", letterSpacing: "1px", display: "block", marginBottom: "8px" }}>AMOUNT (KES)</label>
-          <input style={inputStyle} placeholder="e.g. 100" value={amount} onChange={e => setAmount(e.target.value)} />
-        </div>
+      <div style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: "14px", padding: "20px" }}>
+        <label style={{ color: "#4a6a8a", fontSize: "11px", letterSpacing: "1px", display: "block", marginBottom: "8px" }}>PHONE NUMBER</label>
+        <input style={{ ...inputStyle, marginBottom: "15px" }} placeholder="254708374149" value={phone} onChange={e => setPhone(e.target.value)} />
+        <label style={{ color: "#4a6a8a", fontSize: "11px", letterSpacing: "1px", display: "block", marginBottom: "8px" }}>AMOUNT (KES)</label>
+        <input style={{ ...inputStyle, marginBottom: "20px" }} placeholder="e.g. 100" value={amount} onChange={e => setAmount(e.target.value)} />
         <button onClick={mode === "deposit" ? deposit : withdraw} disabled={loading} style={{ width: "100%", padding: "15px", background: mode === "deposit" ? "linear-gradient(135deg, #16a34a, #15803d)" : "linear-gradient(135deg, #d97706, #b45309)", border: "none", borderRadius: "10px", color: "white", fontWeight: "bold", cursor: "pointer", fontFamily: "Times New Roman", fontSize: "15px" }}>
           {loading ? "PROCESSING..." : mode === "deposit" ? "SEND M-PESA DEPOSIT →" : "WITHDRAW TO M-PESA →"}
         </button>
-        {message && <div style={{ marginTop: "15px", background: "#0a2010", border: "1px solid #1a5030", borderRadius: "8px", padding: "12px 16px" }}><p style={{ color: "#22c55e", margin: 0, fontSize: "13px" }}>✓ {message}</p></div>}
+        {message && <div style={{ marginTop: "12px", background: "#0a2010", border: "1px solid #1a5030", borderRadius: "8px", padding: "10px" }}><p style={{ color: "#22c55e", margin: 0, fontSize: "13px" }}>✓ {message}</p></div>}
       </div>
     </div>
   );
@@ -459,7 +344,6 @@ function MPesa({ user, refresh }) {
 function History({ user }) {
   const [transactions, setTransactions] = useState([]);
   const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     fetch(`${API}/user/${user.username}`).then(r => r.json()).then(d => { setTransactions(d.transactions || []); setLoading(false); });
   }, [user]);
@@ -467,33 +351,27 @@ function History({ user }) {
   const typeColor = { DEPOSIT: "#22c55e", TRANSFER: T, "M-PESA DEPOSIT": "#16a34a", "M-PESA WITHDRAW": "#d97706" };
 
   return (
-    <div style={{ padding: "30px", fontFamily: "Times New Roman" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "25px" }}>
-        <div>
-          <h2 style={{ color: "white", margin: 0 }}>Transaction History</h2>
-          <p style={{ color: "#4a6a8a", fontSize: "13px", margin: "5px 0 0" }}>Permanent blockchain record of all your transactions</p>
-        </div>
-        <Badge text={`${transactions.length} RECORDS`} />
-      </div>
+    <div style={{ padding: "20px", fontFamily: "Times New Roman" }}>
+      <h2 style={{ color: "white", marginBottom: "5px" }}>Transaction History</h2>
+      <p style={{ color: "#4a6a8a", fontSize: "13px", marginBottom: "20px" }}>{transactions.length} permanent records</p>
       <div style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: "14px", overflow: "hidden" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1.5fr 1fr 1fr", padding: "14px 20px", background: "#060e1c", borderBottom: `1px solid ${BORDER}` }}>
-          {["TYPE", "FROM → TO", "AMOUNT", "TIME"].map(h => (
-            <span key={h} style={{ color: "#2a4a6a", fontSize: "11px", letterSpacing: "1px" }}>{h}</span>
-          ))}
-        </div>
         {loading ? (
-          <p style={{ padding: "40px", textAlign: "center", color: "#4a6a8a" }}>Loading...</p>
+          <p style={{ padding: "30px", textAlign: "center", color: "#4a6a8a" }}>Loading...</p>
         ) : transactions.length === 0 ? (
-          <div style={{ padding: "60px", textAlign: "center" }}>
+          <div style={{ padding: "40px", textAlign: "center" }}>
             <div style={{ fontSize: "40px", marginBottom: "10px" }}>📭</div>
             <p style={{ color: "#4a6a8a" }}>No transactions yet</p>
           </div>
         ) : transactions.map((tx, i) => (
-          <div key={tx.txId || i} style={{ display: "grid", gridTemplateColumns: "1fr 1.5fr 1fr 1fr", padding: "14px 20px", borderBottom: `1px solid ${BORDER}`, alignItems: "center" }}>
-            <span style={{ background: `${typeColor[tx.type] || T}15`, color: typeColor[tx.type] || T, padding: "3px 10px", borderRadius: "20px", fontSize: "11px", width: "fit-content" }}>{tx.type}</span>
-            <span style={{ color: "#4a6a8a", fontSize: "12px" }}>{tx.from} → {tx.to}</span>
-            <span style={{ color: "white", fontSize: "13px", fontWeight: "bold" }}>{tx.kesAmount}</span>
-            <span style={{ color: "#2a4a6a", fontSize: "11px" }}>{tx.time}</span>
+          <div key={tx.txId || i} style={{ padding: "15px 20px", borderBottom: `1px solid ${BORDER}` }}>
+            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "5px" }}>
+              <span style={{ background: `${typeColor[tx.type] || T}15`, color: typeColor[tx.type] || T, padding: "3px 10px", borderRadius: "20px", fontSize: "11px" }}>{tx.type}</span>
+              <span style={{ color: "white", fontSize: "14px", fontWeight: "bold" }}>{tx.kesAmount}</span>
+            </div>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <span style={{ color: "#4a6a8a", fontSize: "11px" }}>{tx.from} → {tx.to}</span>
+              <span style={{ color: "#2a4a6a", fontSize: "11px" }}>{tx.time}</span>
+            </div>
           </div>
         ))}
       </div>
