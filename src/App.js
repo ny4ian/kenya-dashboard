@@ -4,7 +4,7 @@ const T = "#00f5c4";
 const DARK = "#050d1a";
 const CARD = "#0a1628";
 const BORDER = "#0d2545";
-const API = "http://localhost:3001";
+const API = "https://chainpay-kenya-api.onrender.com";
 
 const glow = { boxShadow: "0 0 30px rgba(0,245,196,0.08)" };
 const inputStyle = {
