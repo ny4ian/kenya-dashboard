@@ -188,21 +188,24 @@ function RegisterPage({ onRegister, goLogin }) {
 
 function Nav({ page, setPage, user, onLogout }) {
   const links = ["Home", "Wallet", "Send", "MPesa", "History"];
+  const [menuOpen, setMenuOpen] = useState(false);
   return (
-    <div style={{ background: "#060e1c", borderBottom: `1px solid ${BORDER}`, padding: "0 30px", display: "flex", alignItems: "center", justifyContent: "space-between", height: "60px", position: "sticky", top: 0, zIndex: 100 }}>
-      <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
-        <div style={{ width: "32px", height: "32px", background: `linear-gradient(135deg, ${T}, #0099ff)`, borderRadius: "8px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "16px" }}>⬡</div>
-        <span style={{ color: T, fontFamily: "Times New Roman", fontSize: "15px", fontWeight: "bold", letterSpacing: "2px" }}>CHAINPAY KENYA</span>
+    <div style={{ background: "#060e1c", borderBottom: `1px solid ${BORDER}`, padding: "0 20px", position: "sticky", top: 0, zIndex: 100 }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", height: "60px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "10px" }}>
+          <div style={{ width: "32px", height: "32px", background: `linear-gradient(135deg, ${T}, #0099ff)`, borderRadius: "8px", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "16px" }}>⬡</div>
+          <span style={{ color: T, fontFamily: "Times New Roman", fontSize: "14px", fontWeight: "bold", letterSpacing: "1px" }}>CHAINPAY KENYA</span>
+        </div>
+        <button onClick={() => setMenuOpen(!menuOpen)} style={{ background: "none", border: "none", color: "white", fontSize: "24px", cursor: "pointer" }}>☰</button>
       </div>
-      <div style={{ display: "flex", gap: "4px" }}>
-        {links.map(l => (
-          <button key={l} onClick={() => setPage(l)} style={{ background: page === l ? `${T}15` : "transparent", color: page === l ? T : "#4a6a8a", border: page === l ? `1px solid ${T}40` : "1px solid transparent", padding: "7px 18px", borderRadius: "8px", cursor: "pointer", fontFamily: "Times New Roman", fontSize: "13px", transition: "all 0.2s" }}>{l}</button>
-        ))}
-      </div>
-      <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-        <Badge text={`👤 ${user?.username}`} color="#4a6a8a" />
-        <button onClick={onLogout} style={{ background: "#1a0808", border: "1px solid #3a1515", color: "#ff6b6b", padding: "7px 16px", borderRadius: "8px", cursor: "pointer", fontFamily: "Times New Roman", fontSize: "12px" }}>LOGOUT</button>
-      </div>
+      {menuOpen && (
+        <div style={{ paddingBottom: "15px" }}>
+          {links.map(l => (
+            <button key={l} onClick={() => { setPage(l); setMenuOpen(false); }} style={{ display: "block", width: "100%", textAlign: "left", background: page === l ? `${T}15` : "transparent", color: page === l ? T : "#4a6a8a", border: "none", padding: "12px 10px", cursor: "pointer", fontFamily: "Times New Roman", fontSize: "14px", borderRadius: "8px" }}>{l}</button>
+          ))}
+          <button onClick={onLogout} style={{ display: "block", width: "100%", textAlign: "left", background: "#1a0808", border: "none", color: "#ff6b6b", padding: "12px 10px", cursor: "pointer", fontFamily: "Times New Roman", fontSize: "14px", borderRadius: "8px", marginTop: "5px" }}>LOGOUT</button>
+        </div>
+      )}
     </div>
   );
 }
