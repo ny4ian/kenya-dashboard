@@ -896,82 +896,108 @@ function CurrencySelect({ value, onChange }) {
     </div>
   );
 }
-function Wallet({ user, refresh }) {
+function WalletPage({ user, refresh }) {
   const [amount, setAmount] = useState("");
   const [currency, setCurrency] = useState("KES");
   const [bank, setBank] = useState("Equity Bank");
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState(null);
   const [loading, setLoading] = useState(false);
-  const conversions = { KES: 1, USD: 129.50, EUR: 140.20, GBP: 163.80 };
-  const preview = amount ? (parseFloat(amount) * conversions[currency]).toFixed(2) : null;
+
+  const preview = amount ? (parseFloat(amount) * CONVERSIONS[currency]).toFixed(2) : null;
 
   const deposit = async () => {
-    if (!amount) { setMessage("Enter an amount"); return; }
+    if (!amount) { setMessage({ ok: false, text: "Enter an amount" }); return; }
     setLoading(true);
-    const res = await fetch(`${API}/deposit`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ username: user.username, amount, currency })
-    });
-    const data = await res.json();
-    setMessage(data.status ? `Bank transfer from ${bank} successful` : data.error);
-    setAmount("");
+    try {
+      const data = await api.deposit(user.username, amount, currency);
+      if (data.status) {
+        setMessage({ ok: true, text: `Bank transfer from ${bank} successful` });
+        setAmount("");
+      } else {
+        setMessage({ ok: false, text: data.error || "Transfer failed" });
+      }
+    } catch {
+      setMessage({ ok: false, text: "Cannot connect to server" });
+    }
     refresh();
     setLoading(false);
   };
 
   return (
-    <div style={{ padding: "20px", fontFamily: "Times New Roman" }}>
-      <h2 style={{ color: "white", marginBottom: "5px" }}>Bank Transfer</h2>
-      <p style={{ color: "#4a6a8a", fontSize: "13px", marginBottom: "20px" }}>Transfer funds from your bank into your ChainPay Kenya wallet</p>
-      <div style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: "14px", padding: "20px", marginBottom: "15px" }}>
+    <div className="mx-auto max-w-3xl px-4 py-6 lg:px-8 lg:py-8">
+      <PageHeader title="Bank transfer" subtitle="Transfer funds from your bank into your ChainPay Kenya wallet" />
 
-        <label style={{ color: "#4a6a8a", fontSize: "11px", letterSpacing: "1px", display: "block", marginBottom: "8px" }}>SOURCE BANK</label>
-        <select style={{ ...inputStyle, marginBottom: "15px" }} value={bank} onChange={e => setBank(e.target.value)}>
-          <option>Equity Bank</option>
-          <option>KCB Bank</option>
-          <option>Cooperative Bank</option>
-          <option>Absa Bank Kenya</option>
-          <option>Standard Chartered Kenya</option>
-          <option>NCBA Bank</option>
-          <option>Family Bank</option>
-          <option>DTB Bank</option>
-        </select>
-
-        <label style={{ color: "#4a6a8a", fontSize: "11px", letterSpacing: "1px", display: "block", marginBottom: "8px" }}>AMOUNT</label>
-        <input style={{ ...inputStyle, marginBottom: "15px" }} placeholder="e.g. 1000" value={amount} onChange={e => setAmount(e.target.value)} />
-
-        <label style={{ color: "#4a6a8a", fontSize: "11px", letterSpacing: "1px", display: "block", marginBottom: "8px" }}>CURRENCY</label>
-        <select style={{ ...inputStyle, marginBottom: "15px" }} value={currency} onChange={e => setCurrency(e.target.value)}>
-          <option>KES</option><option>USD</option><option>EUR</option><option>GBP</option>
-        </select>
-
-        {preview && currency !== "KES" && (
-          <div style={{ background: "#00f5c408", border: "1px solid #00f5c425", borderRadius: "8px", padding: "10px", marginBottom: "15px" }}>
-            <p style={{ color: "#00f5c4", margin: 0, fontSize: "13px" }}>≈ KES {parseFloat(preview).toLocaleString()} at 1 {currency} = KES {conversions[currency]}</p>
+      <Fade delay={60}>
+        <GlassPanel glow className="p-6">
+          <label className="mb-2 block text-[11px] font-medium tracking-wider text-slate-500">SOURCE BANK</label>
+          <div className="relative mb-4">
+            <select
+              value={bank}
+              onChange={(e) => setBank(e.target.value)}
+              className="w-full appearance-none rounded-2xl border border-white/10 bg-slate-900/60 px-4 py-4 pr-10 text-[15px] font-medium text-slate-100 outline-none focus:border-teal-400/60 focus:ring-2 focus:ring-teal-400/20"
+            >
+              <option>Equity Bank</option>
+              <option>KCB Bank</option>
+              <option>Cooperative Bank</option>
+              <option>Absa Bank Kenya</option>
+              <option>Standard Chartered Kenya</option>
+              <option>NCBA Bank</option>
+              <option>Family Bank</option>
+              <option>DTB Bank</option>
+            </select>
+            <ChevronDown className="pointer-events-none absolute right-4 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-500" />
           </div>
-        )}
 
-        <button onClick={deposit} disabled={loading} style={{ width: "100%", padding: "15px", background: "linear-gradient(135deg, #00f5c4, #0099ff)", border: "none", borderRadius: "10px", color: "#050d1a", fontWeight: "bold", cursor: "pointer", fontFamily: "Times New Roman", fontSize: "15px" }}>
-          {loading ? "PROCESSING TRANSFER..." : "TRANSFER TO WALLET →"}
-        </button>
-
-        {message && (
-          <div style={{ marginTop: "12px", background: "#0a2010", border: "1px solid #1a5030", borderRadius: "8px", padding: "10px" }}>
-            <p style={{ color: "#22c55e", margin: 0, fontSize: "13px" }}>✓ {message}</p>
+          <div className="grid grid-cols-3 gap-3">
+            <div className="col-span-2">
+              <FloatingInput
+                label="Amount" icon={CircleDollarSign}
+                value={amount} onChange={(e) => setAmount(e.target.value)}
+                placeholder="e.g. 1000"
+              />
+            </div>
+            <CurrencySelect value={currency} onChange={setCurrency} />
           </div>
-        )}
-      </div>
 
-      <div style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: "14px", padding: "20px" }}>
-        <p style={{ color: "#4a6a8a", fontSize: "11px", letterSpacing: "1px", margin: "0 0 12px" }}>SUPPORTED EXCHANGE RATES</p>
-        {Object.entries(conversions).filter(([k]) => k !== "KES").map(([cur, rate]) => (
-          <div key={cur} style={{ display: "flex", justifyContent: "space-between", padding: "8px 0", borderBottom: `1px solid ${BORDER}` }}>
-            <span style={{ color: "#4a6a8a", fontSize: "13px" }}>1 {cur}</span>
-            <span style={{ color: "white", fontSize: "13px" }}>KES {rate.toLocaleString()}</span>
+          {preview && currency !== "KES" && (
+            <div className="mt-3 flex items-center gap-2 rounded-xl border border-teal-400/20 bg-teal-400/5 px-4 py-3">
+              <ArrowLeftRight className="h-4 w-4 text-teal-300" />
+              <p className="text-[13px] text-teal-200">
+                ≈ {fmtKES(preview)} at 1 {currency} = {fmtKES(CONVERSIONS[currency])}
+              </p>
+            </div>
+          )}
+
+          {message && (
+            <div className={`mt-4 flex items-center gap-2 rounded-xl border px-4 py-3 text-[13px] ${
+              message.ok
+                ? "border-emerald-500/20 bg-emerald-500/10 text-emerald-300"
+                : "border-rose-500/20 bg-rose-500/10 text-rose-300"
+            }`}>
+              {message.ok ? <CheckCircle2 className="h-4 w-4 shrink-0" /> : <AlertCircle className="h-4 w-4 shrink-0" />}
+              {message.text}
+            </div>
+          )}
+
+          <div className="mt-5">
+            <GradientButton onClick={deposit} loading={loading} icon={ArrowDownLeft}>
+              Transfer to wallet
+            </GradientButton>
           </div>
-        ))}
-      </div>
+        </GlassPanel>
+      </Fade>
+
+      <Fade delay={120} className="mt-5">
+        <GlassPanel className="p-6">
+          <p className="mb-3 text-[11px] font-medium tracking-wider text-slate-500">SUPPORTED EXCHANGE RATES</p>
+          {Object.entries(CONVERSIONS).filter(([k]) => k !== "KES").map(([cur, rate]) => (
+            <div key={cur} className="flex items-center justify-between border-b border-white/[0.05] py-2.5 last:border-0">
+              <span className="text-[13px] text-slate-500">1 {cur}</span>
+              <span className="text-[13px] text-white">{fmtKES(rate)}</span>
+            </div>
+          ))}
+        </GlassPanel>
+      </Fade>
     </div>
   );
 }
