@@ -105,9 +105,9 @@ function useAuth() {
   return { user, login, logout };
 }
 
-/* =============================================================================
+/* 
    hooks/useWallet.js — wallet + transaction fetching, same GET /user/:username
-   ========================================================================== */
+   */
 function useWallet(user) {
   const [wallet, setWallet] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -126,14 +126,14 @@ function useWallet(user) {
   return { wallet, loading, refresh };
 }
 
-/* =============================================================================
+/* 
    Theme context — central design tokens
-   ========================================================================== */
+ */
 const ToastCtx = createContext(() => {});
 
-/* =============================================================================
+/* 
    components/ui — primitives
-   ========================================================================== */
+   */
 
 function GlassPanel({ className = "", children, glow = false, ...props }) {
   return (
@@ -896,86 +896,82 @@ function CurrencySelect({ value, onChange }) {
     </div>
   );
 }
-
-function WalletPage({ user, wallet, refresh }) {
+function Wallet({ user, refresh }) {
   const [amount, setAmount] = useState("");
   const [currency, setCurrency] = useState("KES");
-  const [message, setMessage] = useState(null);
+  const [bank, setBank] = useState("Equity Bank");
+  const [message, setMessage] = useState("");
   const [loading, setLoading] = useState(false);
-  const preview = amount ? (parseFloat(amount) * CONVERSIONS[currency]).toFixed(2) : null;
+  const conversions = { KES: 1, USD: 129.50, EUR: 140.20, GBP: 163.80 };
+  const preview = amount ? (parseFloat(amount) * conversions[currency]).toFixed(2) : null;
 
   const deposit = async () => {
-    if (!amount) { setMessage({ ok: false, text: "Enter an amount" }); return; }
-    setLoading(true); setMessage(null);
-    try {
-      const data = await api.deposit(user.username, amount, currency);
-      setMessage({ ok: !data.error, text: data.status || data.error });
-      setAmount("");
-      refresh();
-    } catch { setMessage({ ok: false, text: "Cannot connect to server" }); }
+    if (!amount) { setMessage("Enter an amount"); return; }
+    setLoading(true);
+    const res = await fetch(`${API}/deposit`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ username: user.username, amount, currency })
+    });
+    const data = await res.json();
+    setMessage(data.status ? `Bank transfer from ${bank} successful` : data.error);
+    setAmount("");
+    refresh();
     setLoading(false);
   };
 
   return (
-    <div className="mx-auto max-w-3xl px-4 py-6 lg:px-8 lg:py-8">
-      <PageHeader title="Wallet" subtitle="Deposit funds — automatically converted to KES" />
+    <div style={{ padding: "20px", fontFamily: "Times New Roman" }}>
+      <h2 style={{ color: "white", marginBottom: "5px" }}>Bank Transfer</h2>
+      <p style={{ color: "#4a6a8a", fontSize: "13px", marginBottom: "20px" }}>Transfer funds from your bank into your ChainPay Kenya wallet</p>
+      <div style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: "14px", padding: "20px", marginBottom: "15px" }}>
 
-      <Fade delay={60}>
-        <GlassPanel glow className="relative overflow-hidden p-6">
-          <div className="pointer-events-none absolute -right-16 -top-16 h-48 w-48 rounded-full bg-teal-500/10 blur-3xl" />
-          <p className="relative text-[11px] font-medium uppercase tracking-wider text-slate-500">Available balance</p>
-          <h3 className="relative mt-1 text-3xl font-extrabold text-teal-300">
-            <AnimatedNumber value={wallet?.balanceKES || 0} prefix="KES " decimals={2} />
-          </h3>
-          <p className="relative mt-2 text-[12px] text-slate-500">Account {wallet?.accountNumber}</p>
-        </GlassPanel>
-      </Fade>
+        <label style={{ color: "#4a6a8a", fontSize: "11px", letterSpacing: "1px", display: "block", marginBottom: "8px" }}>SOURCE BANK</label>
+        <select style={{ ...inputStyle, marginBottom: "15px" }} value={bank} onChange={e => setBank(e.target.value)}>
+          <option>Equity Bank</option>
+          <option>KCB Bank</option>
+          <option>Cooperative Bank</option>
+          <option>Absa Bank Kenya</option>
+          <option>Standard Chartered Kenya</option>
+          <option>NCBA Bank</option>
+          <option>Family Bank</option>
+          <option>DTB Bank</option>
+        </select>
 
-      <Fade delay={120} className="mt-5">
-        <GlassPanel className="p-6">
-          <label className="mb-2 block text-[11px] font-medium uppercase tracking-wider text-slate-500">Amount</label>
-          <div className="grid grid-cols-3 gap-3">
-            <div className="col-span-2">
-              <FloatingInput label="Amount" icon={CircleDollarSign} value={amount} onChange={(e) => setAmount(e.target.value)} placeholder="e.g. 1000" />
-            </div>
-            <CurrencySelect value={currency} onChange={setCurrency} />
+        <label style={{ color: "#4a6a8a", fontSize: "11px", letterSpacing: "1px", display: "block", marginBottom: "8px" }}>AMOUNT</label>
+        <input style={{ ...inputStyle, marginBottom: "15px" }} placeholder="e.g. 1000" value={amount} onChange={e => setAmount(e.target.value)} />
+
+        <label style={{ color: "#4a6a8a", fontSize: "11px", letterSpacing: "1px", display: "block", marginBottom: "8px" }}>CURRENCY</label>
+        <select style={{ ...inputStyle, marginBottom: "15px" }} value={currency} onChange={e => setCurrency(e.target.value)}>
+          <option>KES</option><option>USD</option><option>EUR</option><option>GBP</option>
+        </select>
+
+        {preview && currency !== "KES" && (
+          <div style={{ background: "#00f5c408", border: "1px solid #00f5c425", borderRadius: "8px", padding: "10px", marginBottom: "15px" }}>
+            <p style={{ color: "#00f5c4", margin: 0, fontSize: "13px" }}>≈ KES {parseFloat(preview).toLocaleString()} at 1 {currency} = KES {conversions[currency]}</p>
           </div>
+        )}
 
-          <div className={`mt-3 overflow-hidden transition-all duration-300 ${preview && currency !== "KES" ? "max-h-20 opacity-100" : "max-h-0 opacity-0"}`}>
-            <div className="flex items-center gap-2 rounded-xl border border-teal-400/20 bg-teal-400/5 px-4 py-3">
-              <ArrowLeftRight className="h-4 w-4 text-teal-300" />
-              <p className="text-[13px] text-teal-200">≈ {fmtKES(preview)} will be credited</p>
-            </div>
+        <button onClick={deposit} disabled={loading} style={{ width: "100%", padding: "15px", background: "linear-gradient(135deg, #00f5c4, #0099ff)", border: "none", borderRadius: "10px", color: "#050d1a", fontWeight: "bold", cursor: "pointer", fontFamily: "Times New Roman", fontSize: "15px" }}>
+          {loading ? "PROCESSING TRANSFER..." : "TRANSFER TO WALLET →"}
+        </button>
+
+        {message && (
+          <div style={{ marginTop: "12px", background: "#0a2010", border: "1px solid #1a5030", borderRadius: "8px", padding: "10px" }}>
+            <p style={{ color: "#22c55e", margin: 0, fontSize: "13px" }}>✓ {message}</p>
           </div>
+        )}
+      </div>
 
-          <div className="mt-5">
-            <GradientButton onClick={deposit} loading={loading} icon={ArrowDownLeft}>Deposit funds</GradientButton>
+      <div style={{ background: CARD, border: `1px solid ${BORDER}`, borderRadius: "14px", padding: "20px" }}>
+        <p style={{ color: "#4a6a8a", fontSize: "11px", letterSpacing: "1px", margin: "0 0 12px" }}>SUPPORTED EXCHANGE RATES</p>
+        {Object.entries(conversions).filter(([k]) => k !== "KES").map(([cur, rate]) => (
+          <div key={cur} style={{ display: "flex", justifyContent: "space-between", padding: "8px 0", borderBottom: `1px solid ${BORDER}` }}>
+            <span style={{ color: "#4a6a8a", fontSize: "13px" }}>1 {cur}</span>
+            <span style={{ color: "white", fontSize: "13px" }}>KES {rate.toLocaleString()}</span>
           </div>
-
-          {message && (
-            <div className={`mt-4 flex items-center gap-2 rounded-xl border px-4 py-3 text-[13px] ${
-              message.ok ? "border-emerald-500/20 bg-emerald-500/10 text-emerald-300" : "border-rose-500/20 bg-rose-500/10 text-rose-300"
-            }`}>
-              {message.ok ? <CheckCircle2 className="h-4 w-4 shrink-0" /> : <AlertCircle className="h-4 w-4 shrink-0" />}
-              {message.text}
-            </div>
-          )}
-        </GlassPanel>
-      </Fade>
-
-      <Fade delay={180} className="mt-5">
-        <GlassPanel className="p-6">
-          <p className="mb-3 text-[11px] font-medium uppercase tracking-wider text-slate-500">Exchange rates</p>
-          <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
-            {Object.entries(CONVERSIONS).filter(([k]) => k !== "KES").map(([cur, rate]) => (
-              <div key={cur} className="flex items-center justify-between rounded-xl border border-white/[0.06] bg-white/[0.02] px-4 py-3">
-                <span className="text-[13px] font-medium text-slate-400">1 {cur}</span>
-                <span className="text-[13px] font-semibold tabular-nums text-white">{fmtKES(rate)}</span>
-              </div>
-            ))}
-          </div>
-        </GlassPanel>
-      </Fade>
+        ))}
+      </div>
     </div>
   );
 }
